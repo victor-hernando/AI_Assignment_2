@@ -40,6 +40,8 @@ public class FSM_Mouse : FiniteStateMachine
             () =>
             {
                 goToTarget.enabled = false;
+                goToTarget.target = null;
+                blackboard.DestroyMarker();
             });
         State goHome = new State("GoingHome",
             () =>

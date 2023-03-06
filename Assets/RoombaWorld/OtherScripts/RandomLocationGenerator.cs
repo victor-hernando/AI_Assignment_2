@@ -13,7 +13,7 @@ public class RandomLocationGenerator  {
         // get all the nodes in the gridgraph and save the walkable ones in allNodes list.
         allNodes = new List<GraphNode>();
         GridGraph gg = AstarPath.active.data.gridGraph;
-        gg.GetNodes(nod => { if (nod.Walkable) allNodes.Add(nod); });
+        gg.GetNodes(nod => { if (nod.Walkable && nod.Tag != 2) allNodes.Add(nod); });
 
         // get all the patrol points
         patrolPoints = new List<GameObject>(GameObject.FindGameObjectsWithTag("PATROLPOINT"));
@@ -24,6 +24,7 @@ public class RandomLocationGenerator  {
     {
         GraphNode node = allNodes[Random.Range(0, allNodes.Count)];
         // return its position as a vector 3
+        Debug.LogWarning(node.Tag);
         return (Vector3)node.position;
     }
 

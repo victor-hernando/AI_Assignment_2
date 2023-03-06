@@ -46,6 +46,13 @@ public class MOUSE_Blackboard : MonoBehaviour
     {
         return Instantiate(markerPrefab, RandomLocationGenerator.RandomWalkableLocation(), Quaternion.identity);
     }
+
+    public void DestroyMarker()
+    {
+        Destroy(target);
+        target = null;
+    }
+
     public void GeneratePoo()
     {
        Instantiate(pooPrefab, transform.position, Quaternion.identity);
