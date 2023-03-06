@@ -71,7 +71,7 @@ public class FSM_Roomba : FiniteStateMachine
         //TRANSITIONS
         Transition WaypointReached = new Transition("WaypointReached",
             () => {
-                return SensingUtils.DistanceToTarget(gameObject, goToTarget.target) < blackboard.waypointReachedRadius;
+                return goToTarget.routeTerminated();
             },
             () => { }
         );
@@ -84,9 +84,9 @@ public class FSM_Roomba : FiniteStateMachine
             () => { }  
         );
 
-        Transition DustReached = new Transition("DustDetected",
+        Transition DustReached = new Transition("DustReached",
             () => {
-                return SensingUtils.DistanceToTarget(gameObject, goToTarget.target) < blackboard.dustReachedRadius;
+                return goToTarget.routeTerminated();
             },
             () => { }
         );
@@ -99,9 +99,9 @@ public class FSM_Roomba : FiniteStateMachine
             () => { }
         );
 
-        Transition PooReached = new Transition("PooDetected",
+        Transition PooReached = new Transition("PooReached",
             () => {
-                return SensingUtils.DistanceToTarget(gameObject, goToTarget.target) < blackboard.pooReachedRadius;
+                return goToTarget.routeTerminated();
             },
             () => { }
         );

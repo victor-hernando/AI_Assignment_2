@@ -76,4 +76,10 @@ public class ROOMBA_Blackboard : MonoBehaviour {
             return result;
         }
     }
+
+    // get the closest charger in order to the current roomba position
+    public GameObject GetClosestCharger()
+    {
+        return SensingUtils.FindInstanceWithinRadius(gameObject, "ENERGY", 10000f);
+    }
 }

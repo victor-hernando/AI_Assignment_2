@@ -6,16 +6,18 @@ using Steerings;
 public class FSM_AlertStateRoomba : FiniteStateMachine
 {
     private ROOMBA_Blackboard blackboard;
+    private GoToTarget goToTarget;
 
     public override void OnEnter()
     {
         blackboard = GetComponent<ROOMBA_Blackboard>();
+        goToTarget = GetComponent<GoToTarget>();
         base.OnEnter();
     }
 
     public override void OnExit()
     {
-
+        base.DisableAllSteerings();
         base.OnExit();
     }
 
@@ -24,35 +26,53 @@ public class FSM_AlertStateRoomba : FiniteStateMachine
         /* STAGE 1: create the states with their logic(s)
          *-----------------------------------------------*/
 
-        FiniteStateMachine CLEAN = ScriptableObject.CreateInstance<FSM_Roomba>();
-        CLEAN.Name = "CLEAN";
+        FiniteStateMachine Clean = ScriptableObject.CreateInstance<FSM_Roomba>();
+        Clean.Name = "CLEAN";
 
-        State GoingToChargingStation = new State("GoingToChargingStation",
-            () => { }, 
+        State GoingToCharge = new State("GoingToCharge",
+            () => { 
+                goToTarget.enabled = true;
+                goToTarget.target = blackboard.GetClosestCharger();
+            }, 
             () => { },
+            () => { goToTarget.enabled = false; }
+        );
+
+        State Charging = new State("Charging",
+            () => { },
+            () => { blackboard.Recharge(Time.deltaTime); },
+            () => { }
+        );
+
+        /* STAGE 2: create the transitions with their logic(s)
+         * ---------------------------------------------------*/
+
+        Transition LowEnergy = new Transition("LowEnergy",
+            () => { return blackboard.currentCharge < blackboard.minCharge; }, 
             () => { }  
         );
 
+        Transition ChargeStationReached = new Transition("ChargeStationReached",
+            () => { return goToTarget.routeTerminated(); },
+            () => { }
+        );
 
-
-        /* STAGE 2: create the transitions with their logic(s)
-         * ---------------------------------------------------
-
-        Transition varName = new Transition("TransitionName",
-            () => {  }, // write the condition checkeing code in {}
-            () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
+        Transition FullEnergy = new Transition("FullEnergy",
+            () => { return blackboard.currentCharge == blackboard.maxCharge; },
+            () => { }
         );
 
 
         /* STAGE 3: add states and transitions to the FSM 
-         * ----------------------------------------------
-            
-        AddStates(...);
+         * ----------------------------------------------*/
 
-        AddTransition(sourceState, transition, destinationState);
+        AddStates(Clean, GoingToCharge, Charging);
 
-        initialState = ... 
+        AddTransition(Clean, LowEnergy, GoingToCharge);
+        AddTransition(GoingToCharge, ChargeStationReached, Charging);
+        AddTransition(Charging, FullEnergy, Clean);
 
-        */
+        initialState = Clean; 
+
     }
 }
