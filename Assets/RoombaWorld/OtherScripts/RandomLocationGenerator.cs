@@ -29,5 +29,4 @@ public class RandomLocationGenerator  {
     {
         return patrolPoints[Random.Range(0, patrolPoints.Count)].transform.position;
     }
-
 }

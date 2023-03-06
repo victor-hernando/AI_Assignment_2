@@ -49,7 +49,6 @@ public class ClickSpawn : MonoBehaviour {
             GameObject mouse = GameObject.Instantiate(mousePrefab);
             mouse.transform.position = position;
         }
-
     }
 
     private static bool Walkable (Vector3 position)

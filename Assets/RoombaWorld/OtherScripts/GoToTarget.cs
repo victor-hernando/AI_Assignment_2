@@ -21,8 +21,6 @@ public class GoToTarget : MonoBehaviour
         pathFollowingSteering.enabled = false; // can't be enabled until a path is available
     }
 
-    
-
     void Update()
     {
         if (target == null) return;
@@ -40,7 +38,6 @@ public class GoToTarget : MonoBehaviour
         {
             target = null; 
         }
-
     }
 
     public void OnPathComplete(Path p)
@@ -53,7 +50,6 @@ public class GoToTarget : MonoBehaviour
         pathFollowingSteering.currentWaypointIndex = 0;
         pathFollowingSteering.enabled = true;
     }
-
 
     public bool routeTerminated()
     {
