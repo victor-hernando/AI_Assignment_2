@@ -32,7 +32,8 @@ public class FSM_Mouse : FiniteStateMachine
         State needToPoo = new State("NeedToPoo",
             () =>
             {
-                goToTarget.target = blackboard.GenerateMarker();
+                blackboard.target = blackboard.GenerateMarker();
+                goToTarget.target = blackboard.target;
                 goToTarget.enabled = true;
             },
             () => { },
@@ -43,10 +44,12 @@ public class FSM_Mouse : FiniteStateMachine
         State goHome = new State("GoingHome",
             () =>
             {
-                goToTarget.target = blackboard.RandomExitPoint();
+                blackboard.target = blackboard.RandomExitPoint();
+                goToTarget.target = blackboard.target;
                 goToTarget.enabled = true;
             },
-            () => { if (SensingUtils.DistanceToTarget(gameObject, goToTarget.target) <= blackboard.closeEnoughRadius) Destroy(gameObject); },
+            () => { if (SensingUtils.DistanceToTarget(gameObject, blackboard.target) <= blackboard.closeEnoughRadius)
+                    Destroy(gameObject); },
             () =>
             {
                 goToTarget.enabled = false;
@@ -56,10 +59,12 @@ public class FSM_Mouse : FiniteStateMachine
            {
                context.maxAcceleration *= 4;
                context.maxSpeed *= 2;
-               goToTarget.target = blackboard.NearestExitPoint();
+               blackboard.target = blackboard.NearestExitPoint();
+               goToTarget.target = blackboard.target;
                goToTarget.enabled = true;
            },
-           () => { if (SensingUtils.DistanceToTarget(gameObject, goToTarget.target) <= blackboard.closeEnoughRadius) Destroy(gameObject); },
+           () => { if (SensingUtils.DistanceToTarget(gameObject, blackboard.target) <= blackboard.closeEnoughRadius)
+                   Destroy(gameObject); },
            () =>
            {
                context.maxAcceleration /= 4;
@@ -68,7 +73,7 @@ public class FSM_Mouse : FiniteStateMachine
            });
 
         Transition poo = new Transition("poo",
-            () =>{ return SensingUtils.DistanceToTarget(gameObject, goToTarget.target) <= blackboard.closeEnoughRadius; },
+            () =>{ return SensingUtils.DistanceToTarget(gameObject, blackboard.target) <= blackboard.closeEnoughRadius; },
             () =>{ blackboard.GeneratePoo();});
 
         Transition flee = new Transition("flee",

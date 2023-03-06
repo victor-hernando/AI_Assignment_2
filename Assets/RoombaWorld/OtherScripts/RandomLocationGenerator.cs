@@ -38,13 +38,11 @@ public class RandomLocationGenerator  {
     }
     public static Vector3 RandomEntryLocation()
     {
-        GameObject a = entries[Random.Range(0, entries.Count)];
-        Debug.Log(a.name);
-        return a.transform.position;//entries[Random.Range(0, patrolPoints.Count)].transform.position;
+        return entries[Random.Range(0, entries.Count)].transform.position;
     }
 
     public static GameObject RandomEntryPoint()
     {
-        return entries[Random.Range(0, patrolPoints.Count)];
+        return entries[Random.Range(0, entries.Count)];
     }
 }
