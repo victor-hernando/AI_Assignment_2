@@ -815,6 +815,7 @@ MonoBehaviour:
   pooDetectionRadius: 150
   dustReachedRadius: 5
   pooReachedRadius: 5
+  waypointReachedRadius: 5
   chargingStationReachedRadius: 2
   energyConsumptionPerSecond: 1
   energyRechargePerSecond: 15
@@ -1160,6 +1161,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &150009004
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 150009005}
+  m_Layer: 0
+  m_Name: DUSTS
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &150009005
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150009004}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -15.907754, y: 7.9583797, z: -3.8097792}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &206082746
 GameObject:
@@ -2419,6 +2451,7 @@ GameObject:
   m_Component:
   - component: {fileID: 458160356}
   - component: {fileID: 458160357}
+  - component: {fileID: 458160358}
   m_Layer: 0
   m_Name: SPAWNERS
   m_TagString: Untagged
@@ -2453,6 +2486,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 500e121cde0e897408c128f72fd46aed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &458160358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 458160352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7744e7a26bcfab2428d96a1dd7382813, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dustCollector: {fileID: 150009005}
+  time: 5
 --- !u!1 &461689190
 GameObject:
   m_ObjectHideFlags: 0
