@@ -6,6 +6,7 @@ using Steerings;
 public class FSM_Roomba : FiniteStateMachine
 {
     private ROOMBA_Blackboard blackboard;
+    private SteeringContext steeringContext;
     private GoToTarget goToTarget;
     private GameObject waypoint;
     private GameObject dust;
@@ -15,6 +16,7 @@ public class FSM_Roomba : FiniteStateMachine
     {
         blackboard = GetComponent<ROOMBA_Blackboard>();
         goToTarget = GetComponent<GoToTarget>();
+        steeringContext = GetComponent<SteeringContext>();
         base.OnEnter(); 
     }
 
@@ -52,11 +54,15 @@ public class FSM_Roomba : FiniteStateMachine
 
         State GoingToPoo = new State("GoingToPoo",
             () => {
+                steeringContext.maxSpeed *= 1.3f;
+                steeringContext.maxAcceleration *= 2.6f;
                 goToTarget.enabled = true;
                 goToTarget.target = poo;
             },
             () => { },
-            () => { 
+            () => {
+                steeringContext.maxSpeed /= 1.3f;
+                steeringContext.maxAcceleration /= 2.6f;
                 goToTarget.enabled = false;
                 Destroy(poo);
             }
