@@ -48,7 +48,7 @@ public class FSM_Mouse : FiniteStateMachine
                 goToTarget.target = blackboard.target;
                 goToTarget.enabled = true;
             },
-            () => { if (SensingUtils.DistanceToTarget(gameObject, blackboard.target) <= blackboard.closeEnoughRadius)
+            () => { if (goToTarget.routeTerminated())
                     Destroy(gameObject); },
             () =>
             {
@@ -63,7 +63,7 @@ public class FSM_Mouse : FiniteStateMachine
                goToTarget.target = blackboard.target;
                goToTarget.enabled = true;
            },
-           () => { if (SensingUtils.DistanceToTarget(gameObject, blackboard.target) <= blackboard.closeEnoughRadius)
+           () => { if (goToTarget.routeTerminated())
                    Destroy(gameObject); },
            () =>
            {
@@ -73,7 +73,7 @@ public class FSM_Mouse : FiniteStateMachine
            });
 
         Transition poo = new Transition("poo",
-            () =>{ return SensingUtils.DistanceToTarget(gameObject, blackboard.target) <= blackboard.closeEnoughRadius; },
+            () =>{ return goToTarget.routeTerminated(); },
             () =>{ blackboard.GeneratePoo();});
 
         Transition flee = new Transition("flee",

@@ -8,7 +8,6 @@ public class MOUSE_Blackboard : MonoBehaviour
     public GameObject pooPrefab;
     public GameObject target;
     public float roombaDetectionRadius = 50;
-    public float closeEnoughRadius = 50;
     public GameObject markerPrefab;
        
     void Awake()
