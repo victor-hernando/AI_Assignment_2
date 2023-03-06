@@ -1,11 +1,10 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MouseSpawner : MonoBehaviour
 {
-    public float spawnRate;
+    public Vector2 spawnRatio;
     float elapsedTime;
     GameObject mousePrefab;
 
@@ -19,11 +18,11 @@ public class MouseSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        elapsedTime += Time.deltaTime;
-        if(elapsedTime >= spawnRate)
+        elapsedTime -= Time.deltaTime;
+        if(elapsedTime <= 0)
         {
             spawnMice();
-            elapsedTime = 0;
+            elapsedTime = Random.Range(spawnRatio.x, spawnRatio.y);
         }
     }
 
