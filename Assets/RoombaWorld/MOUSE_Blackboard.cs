@@ -39,6 +39,4 @@ public class MOUSE_Blackboard : MonoBehaviour
         return nearest;
     }
 
-
-
 }
