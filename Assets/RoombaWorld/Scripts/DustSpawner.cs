@@ -25,7 +25,8 @@ public class DustSpawner : MonoBehaviour
     {
         Debug.Log("INSIDE");
         yield return new WaitForSeconds(time);
-        Instantiate(dustPrefab,RandomLocationGenerator.RandomWalkableLocation(), Quaternion.identity, dustCollector.transform);
+        GameObject lastDust = Instantiate(dustPrefab,RandomLocationGenerator.RandomWalkableLocation(), Quaternion.identity, dustCollector.transform);
+        lastDust.GetComponent<SpriteRenderer>().color = Random.ColorHSV();
         StartCoroutine(TimeSpawner(this.time));
     }
 }
