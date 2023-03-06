@@ -7,12 +7,15 @@ public class MOUSE_Blackboard : MonoBehaviour
     private GameObject[] exitPoints;
     public GameObject pooPrefab;
     public float roombaDetectionRadius = 50;
+    public float closeEnoughRadius = 50;
+    public GameObject markerPrefab;
        
     void Awake()
     {
         // let's get all the exit&entry points
         exitPoints = GameObject.FindGameObjectsWithTag("EXIT");
         pooPrefab = Resources.Load<GameObject>("POO");
+        markerPrefab = Resources.Load<GameObject>("MARKER");
     }
 
     public GameObject RandomExitPoint()
@@ -39,4 +42,12 @@ public class MOUSE_Blackboard : MonoBehaviour
         return nearest;
     }
 
+    public GameObject GenerateMarker()
+    {
+        return Instantiate(markerPrefab, RandomLocationGenerator.RandomWalkableLocation(), Quaternion.identity);
+    }
+    public void GeneratePoo()
+    {
+       Instantiate(pooPrefab, transform.position, Quaternion.identity);
+    }
 }

@@ -38,7 +38,9 @@ public class RandomLocationGenerator  {
     }
     public static Vector3 RandomEntryLocation()
     {
-        return entries[Random.Range(0, patrolPoints.Count)].transform.position;
+        GameObject a = entries[Random.Range(0, entries.Count)];
+        Debug.Log(a.name);
+        return a.transform.position;//entries[Random.Range(0, patrolPoints.Count)].transform.position;
     }
 
     public static GameObject RandomEntryPoint()

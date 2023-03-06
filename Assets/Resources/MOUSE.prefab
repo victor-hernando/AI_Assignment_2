@@ -104,6 +104,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pooPrefab: {fileID: 1446901862862190, guid: 9082e5f6daa6cbd49852a647c70d3a8c, type: 3}
   roombaDetectionRadius: 50
+  closeEnoughRadius: 2
+  markerPrefab: {fileID: 0}
 --- !u!114 &114462393164921940
 MonoBehaviour:
   m_ObjectHideFlags: 0
