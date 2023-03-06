@@ -15,15 +15,8 @@ public class DustSpawner : MonoBehaviour
         dustPrefab = Resources.Load<GameObject>("DUST");
         StartCoroutine(TimeSpawner(time));
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     IEnumerator TimeSpawner(float time)
     {
-        Debug.Log("INSIDE");
         yield return new WaitForSeconds(time);
         GameObject lastDust = Instantiate(dustPrefab,RandomLocationGenerator.RandomWalkableLocation(), Quaternion.identity, dustCollector.transform);
         lastDust.GetComponent<SpriteRenderer>().color = Random.ColorHSV();
