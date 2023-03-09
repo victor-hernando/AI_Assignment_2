@@ -50,8 +50,7 @@ public class FSM_Mouse : FiniteStateMachine
                 goToTarget.target = blackboard.target;
                 goToTarget.enabled = true;
             },
-            () => { if (goToTarget.routeTerminated())
-                    Destroy(gameObject); },
+            () => { /*if (goToTarget.routeTerminated()) Destroy(gameObject);*/ },
             () =>
             {
                 goToTarget.enabled = false;
@@ -64,15 +63,20 @@ public class FSM_Mouse : FiniteStateMachine
                blackboard.target = blackboard.NearestExitPoint();
                goToTarget.target = blackboard.target;
                goToTarget.enabled = true;
+               GetComponent<SpriteRenderer>().color = Color.green;
            },
-           () => { if (goToTarget.routeTerminated())
-                   Destroy(gameObject); },
+           () => { /*if (goToTarget.routeTerminated()) Destroy(gameObject);*/ },
            () =>
            {
                context.maxAcceleration /= 4;
                context.maxSpeed /= 2;
                goToTarget.enabled = false;
            });
+
+        State dead = new State("dying",
+           () =>{ Destroy(gameObject);},
+           () => {},
+           () =>{});
 
         Transition poo = new Transition("poo",
             () =>{ return goToTarget.routeTerminated(); },
@@ -81,12 +85,16 @@ public class FSM_Mouse : FiniteStateMachine
         Transition flee = new Transition("flee",
             () => { return SensingUtils.FindInstanceWithinRadius(gameObject, "ROOMBA", blackboard.roombaDetectionRadius); },
             () => { });
-
-        AddStates(needToPoo, goHome, runAway);
+        Transition die = new Transition("die",
+            () => { return goToTarget.routeTerminated(); },
+            () => { });
+        AddStates(needToPoo, goHome, runAway, dead);
         AddTransition(needToPoo, flee, runAway);
         AddTransition(needToPoo, poo, goHome);
+        AddTransition(goHome, die, dead);
         AddTransition(goHome, flee, runAway);
-        initialState = needToPoo;
+        AddTransition(runAway, die, dead);
 
+        initialState = needToPoo;
     }
 }
