@@ -88,6 +88,7 @@ public class FSM_Mouse : FiniteStateMachine
         Transition die = new Transition("die",
             () => { return goToTarget.routeTerminated(); },
             () => { });
+
         AddStates(needToPoo, goHome, runAway, dead);
         AddTransition(needToPoo, flee, runAway);
         AddTransition(needToPoo, poo, goHome);
