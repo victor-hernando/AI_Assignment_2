@@ -26,7 +26,7 @@ public class FSM_AlertStateRoomba : FiniteStateMachine
         /* STAGE 1: create the states with their logic(s)
          *-----------------------------------------------*/
 
-        FiniteStateMachine Clean = ScriptableObject.CreateInstance<FSM_Roomba>();
+        FiniteStateMachine Clean = ScriptableObject.CreateInstance<FSM_PooCleaning>();
         Clean.Name = "CLEAN";
 
         State GoingToCharge = new State("GoingToCharge",
