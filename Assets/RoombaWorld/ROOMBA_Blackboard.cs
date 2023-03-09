@@ -19,6 +19,8 @@ public class ROOMBA_Blackboard : MonoBehaviour {
 
     public float currentCharge = 100;
 
+    public GameObject[] energies;
+
     private TextMesh energyLine;
     
     public List<GameObject> memory; // list of detected dust units not picked due to presence of poo
@@ -26,6 +28,7 @@ public class ROOMBA_Blackboard : MonoBehaviour {
 
 	
 	void Start () {
+        energies = GameObject.FindGameObjectsWithTag("ENERGY");
         memory = new List<GameObject>();
         energyLine = GameObject.Find("EnergyLine").GetComponent<TextMesh>();
 	}
@@ -80,6 +83,22 @@ public class ROOMBA_Blackboard : MonoBehaviour {
     // get the closest charger in order to the current roomba position
     public GameObject GetClosestCharger()
     {
-        return SensingUtils.FindInstanceWithinRadius(gameObject, "ENERGY", 10000f);
+        GameObject closerTarget = energies[0];
+        float closerDistance = SensingUtils.DistanceToTarget(gameObject, closerTarget);        
+
+        if(energies.Length > 1)
+        {
+            for (int i = 1; i < energies.Length; i++)
+            {
+                float temporalDistance = SensingUtils.DistanceToTarget(gameObject, energies[i]);
+                if (temporalDistance < closerDistance)
+                {
+                    closerTarget = energies[i];
+                    closerDistance = temporalDistance;
+                }
+            }
+        }
+
+        return closerTarget;
     }
 }

@@ -11,6 +11,7 @@ public class FSM_Roomba : FiniteStateMachine
     private GameObject waypoint;
     private GameObject dust;
     private GameObject poo;
+    private GameObject closerPoo;
 
     public override void OnEnter()
     {
@@ -28,8 +29,9 @@ public class FSM_Roomba : FiniteStateMachine
 
     public override void OnConstruction()
     {
-        //STATES
-         
+        /* STAGE 1: create the states with their logic(s)
+         *-----------------------------------------------*/
+
         State Patrolling = new State("Patrolling",
             () => { 
                 waypoint = RandomLocationGenerator.RandomPatrolPoint();
@@ -48,7 +50,6 @@ public class FSM_Roomba : FiniteStateMachine
             () => { },
             () => { 
                 goToTarget.enabled = false;
-                Destroy(dust);
             }
         );
 
@@ -59,20 +60,22 @@ public class FSM_Roomba : FiniteStateMachine
                 goToTarget.enabled = true;
                 goToTarget.target = poo;
             },
-            () => { },
+            () => { 
+                GameObject dustDetected = SensingUtils.FindInstanceWithinRadius(gameObject, "DUST", blackboard.dustDetectionRadius);
+                if (dustDetected != null) blackboard.AddToMemory(dustDetected);
+            },
             () => {
                 steeringContext.maxSpeed /= 1.3f;
                 steeringContext.maxAcceleration /= 2.6f;
-                goToTarget.enabled = false;
-                Destroy(poo);
+                goToTarget.enabled = false;                
             }
         );
 
-        //TRANSITIONS
+        /* STAGE 2: create the transitions with their logic(s)
+         * ---------------------------------------------------*/
+
         Transition WaypointReached = new Transition("WaypointReached",
-            () => {
-                return goToTarget.routeTerminated();
-            },
+            () => { return goToTarget.routeTerminated(); },
             () => { }
         );
 
@@ -85,10 +88,16 @@ public class FSM_Roomba : FiniteStateMachine
         );
 
         Transition DustReached = new Transition("DustReached",
+            () => { return goToTarget.routeTerminated(); },
+            () => { Destroy(dust); }
+        );
+
+        Transition DustReachedWithMemory = new Transition("DustReached",
+            () => { return goToTarget.routeTerminated() && blackboard.somethingInMemory(); },
             () => {
-                return goToTarget.routeTerminated();
-            },
-            () => { }
+                Destroy(dust);
+                dust = blackboard.RetrieveFromMemory();
+            }
         );
 
         Transition PooDetected = new Transition("PooDetected",
@@ -99,21 +108,39 @@ public class FSM_Roomba : FiniteStateMachine
             () => { }
         );
 
-        Transition PooReached = new Transition("PooReached",
+        Transition CloserPooDetected = new Transition("CloserPooDetected",
             () => {
-                return goToTarget.routeTerminated();
+                closerPoo = SensingUtils.FindInstanceWithinRadius(gameObject, "POO", blackboard.pooDetectionRadius);
+                return poo != closerPoo;
             },
-            () => { }
+            () => { poo = closerPoo; }
         );
 
-        //ADD
+        Transition PooReached = new Transition("PooReached",
+            () => { return goToTarget.routeTerminated(); },
+            () => { Destroy(poo); }
+        );
+
+        Transition PooReachedDustInMemory = new Transition("PooReachedDustInMemory",
+            () => { return goToTarget.routeTerminated() && blackboard.somethingInMemory(); },
+            () => { 
+                Destroy(poo);
+                dust = blackboard.RetrieveFromMemory();
+            }
+        );
+
+        /* STAGE 3: add states and transitions to the FSM 
+         * ----------------------------------------------*/
 
         AddStates(Patrolling, GoingToDust, GoingToPoo);
 
         AddTransition(Patrolling, WaypointReached, Patrolling);
         AddTransition(Patrolling, PooDetected, GoingToPoo);
+        AddTransition(GoingToPoo, CloserPooDetected, GoingToPoo);
+        AddTransition(GoingToPoo, PooReachedDustInMemory, GoingToDust);
         AddTransition(GoingToPoo, PooReached, Patrolling);
         AddTransition(Patrolling, DustDetected, GoingToDust);
+        AddTransition(GoingToDust, DustReachedWithMemory, GoingToDust);
         AddTransition(GoingToDust, DustReached, Patrolling);
         AddTransition(GoingToDust, PooDetected, GoingToPoo);
 

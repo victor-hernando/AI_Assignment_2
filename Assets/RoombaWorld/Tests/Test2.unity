@@ -824,6 +824,7 @@ MonoBehaviour:
   minCharge: 15
   maxCharge: 99
   currentCharge: 100
+  energies: []
   memory: []
 --- !u!114 &111757792
 MonoBehaviour:

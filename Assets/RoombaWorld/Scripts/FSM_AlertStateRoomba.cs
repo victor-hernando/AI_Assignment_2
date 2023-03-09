@@ -58,7 +58,7 @@ public class FSM_AlertStateRoomba : FiniteStateMachine
         );
 
         Transition FullEnergy = new Transition("FullEnergy",
-            () => { return blackboard.currentCharge == blackboard.maxCharge; },
+            () => { return blackboard.currentCharge >= blackboard.maxCharge; },
             () => { }
         );
 
